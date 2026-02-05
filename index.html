@@ -479,11 +479,12 @@
            👥 DADOS FIXOS
         ================================ */
         let people = [
-          { id: 1, name: "André", docId: "andre", points: 0, color: "#FF6B6B" },
-          { id: 2, name: "Guilherme", docId: "guilherme", points: 0, color: "#4ECDC4" },
-          { id: 3, name: "Lucas", docId: "lucas", points: 0, color: "#FFD166" },
-          { id: 4, name: "Wesley", docId: "wesley", points: 0, color: "#06D6A0" }
-        ];
+  { id: 1, name: "André", docId: "andre", points: 0, color: "#FF6B6B", avatar: "https://i.pravatar.cc/150?img=1" },
+  { id: 2, name: "Guilherme", docId: "guilherme", points: 0, color: "#4ECDC4", avatar: "https://i.pravatar.cc/150?img=2" },
+  { id: 3, name: "Lucas", docId: "lucas", points: 0, color: "#FFD166", avatar: "https://i.pravatar.cc/150?img=3" },
+  { id: 4, name: "Wesley", docId: "wesley", points: 0, color: "#06D6A0", avatar: "https://i.pravatar.cc/150?img=4" }
+];
+
 
         /* ===============================
            🔄 FIRESTORE
@@ -582,15 +583,16 @@
             <div class="person-card">
                 <!-- Avatar com Foto -->
                 <div class="avatar" style="background:${person.color}">
-                    <img src="${person.avatar}" alt="${person.name}" style="
-                        width: 90px;
-                        height: 90px;
-                        border-radius: 50%;
-                        object-fit: cover;
-                        display: block;
-                        margin: 0 auto;
-                    ">
-                </div>
+    <img src="${person.avatar}" alt="${person.name}" style="
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        object-fit: cover;
+        display: block;
+        margin: 0 auto;
+    ">
+</div>
+
 
                 <!-- Nome -->
                 <div class="person-name">${person.name}</div>
