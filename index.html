@@ -572,75 +572,87 @@
         ================================ */
 
         function renderPeopleGrid() {
-            const grid = document.getElementById("peopleGrid");
-            grid.innerHTML = "";
+    const grid = document.getElementById("peopleGrid");
+    grid.innerHTML = "";
 
-            people.forEach(person => {
-                const percent = Math.min((person.points / 10) * 100, 100);
-                const nextLevel = Math.max(10 - person.points, 0);
+    people.forEach(person => {
+        const percent = Math.min((person.points / 10) * 100, 100);
 
-                grid.innerHTML += `
-                    <div class="person-card">
-                        <div class="avatar" style="background:${person.color}">
-                            ${person.name.charAt(0)}
-                        </div>
+        grid.innerHTML += `
+            <div class="person-card">
+                <!-- Avatar com Foto -->
+                <div class="avatar" style="background:${person.color}">
+                    <img src="${person.avatar}" alt="${person.name}" style="
+                        width: 90px;
+                        height: 90px;
+                        border-radius: 50%;
+                        object-fit: cover;
+                        display: block;
+                        margin: 0 auto;
+                    ">
+                </div>
 
-                        <div class="person-name">${person.name}</div>
+                <!-- Nome -->
+                <div class="person-name">${person.name}</div>
 
-                        <div class="points-container">
-                            <div class="points-value" id="points-${person.id}">
-                                ${person.points}
-                            </div>
-                            <div class="points-label">pontos babaca</div>
-
-                            <div class="points-controls">
-                                <button class="point-btn remove-btn" data-id="${person.id}">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                                <button class="point-btn add-btn" data-id="${person.id}">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="progress-container">
-                            <div class="progress-label">
-                                <span>Progresso</span>
-                                <span>${percent.toFixed(0)}%</span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="bar-${person.id}" style="width:${percent}%"></div>
-                            </div>
-                        </div>
+                <!-- Pontuação -->
+                <div class="points-container">
+                    <div class="points-value" id="points-${person.id}">
+                        ${person.points}
                     </div>
-                `;
-            });
+                    <div class="points-label">pontos babaca</div>
 
-            // Adiciona event listeners
-            document.querySelectorAll('.add-btn').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
-                    const id = parseInt(e.currentTarget.dataset.id);
-                    const person = people.find(p => p.id === id);
-                    if (person) {
-                        e.currentTarget.classList.add('pulse');
-                        await addPoint(person);
-                        setTimeout(() => e.currentTarget.classList.remove('pulse'), 300);
-                    }
-                });
-            });
+                    <!-- Controles de Pontos -->
+                    <div class="points-controls">
+                        <button class="point-btn remove-btn" data-id="${person.id}">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button class="point-btn add-btn" data-id="${person.id}">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
 
-            document.querySelectorAll('.remove-btn').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
-                    const id = parseInt(e.currentTarget.dataset.id);
-                    const person = people.find(p => p.id === id);
-                    if (person) {
-                        e.currentTarget.classList.add('pulse');
-                        await removePoint(person);
-                        setTimeout(() => e.currentTarget.classList.remove('pulse'), 300);
-                    }
-                });
-            });
-        }
+                <!-- Barra de Progresso -->
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Progresso</span>
+                        <span>${percent.toFixed(0)}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="bar-${person.id}" style="width:${percent}%"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    // Event listeners para adicionar ponto
+    document.querySelectorAll('.add-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            const id = parseInt(e.currentTarget.dataset.id);
+            const person = people.find(p => p.id === id);
+            if (person) {
+                e.currentTarget.classList.add('pulse');
+                await addPoint(person);
+                setTimeout(() => e.currentTarget.classList.remove('pulse'), 300);
+            }
+        });
+    });
+
+    // Event listeners para remover ponto
+    document.querySelectorAll('.remove-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            const id = parseInt(e.currentTarget.dataset.id);
+            const person = people.find(p => p.id === id);
+            if (person) {
+                e.currentTarget.classList.add('pulse');
+                await removePoint(person);
+                setTimeout(() => e.currentTarget.classList.remove('pulse'), 300);
+            }
+        });
+    });
+}
 
         function updatePersonCard(person) {
             const pointsEl = document.getElementById(`points-${person.id}`);
