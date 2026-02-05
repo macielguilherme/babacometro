@@ -331,6 +331,117 @@
             justify-content: center;
             gap: 8px;
         }
+
+        /* Estilo para a coroa */
+.crown-container {
+    position: relative;
+    display: inline-block;
+}
+
+.crown {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    font-size: 2rem;
+    color: gold;
+    text-shadow: 0 2px 10px rgba(255, 215, 0, 0.8);
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.crown.show {
+    opacity: 1;
+}
+
+/* Avatar Container */
+.avatar-container {
+    position: relative;
+    margin: 0 auto 20px;
+    width: 90px;
+    height: 90px;
+}
+
+.avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Coroa - Estilos aprimorados */
+.crown {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    font-size: 2.5rem;
+    color: gold;
+    text-shadow: 
+        0 0 10px rgba(255, 215, 0, 0.8),
+        0 0 20px rgba(255, 215, 0, 0.6),
+        0 0 30px rgba(255, 215, 0, 0.4);
+    filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.3));
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    pointer-events: none;
+}
+
+.crown.show {
+    opacity: 1;
+    animation: crownBounce 2s infinite;
+}
+
+@keyframes crownBounce {
+    0%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    50% {
+        transform: translateX(-50%) translateY(-5px);
+    }
+}
+
+/* Animação de brilho */
+@keyframes crownGlow {
+    0% {
+        filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8));
+    }
+    50% {
+        filter: drop-shadow(0 0 15px rgba(255, 215, 0, 1));
+    }
+    100% {
+        filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8));
+    }
+}
+
+.crown.show i {
+    animation: crownGlow 2s infinite;
+}
+
+/* Destaque para o líder */
+.person-card:has(.crown.show) {
+    box-shadow: 0 15px 35px rgba(255, 215, 0, 0.2);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.person-card:has(.crown.show) .person-name {
+    color: #FFD700;
+    text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+}
         
         /* Animações */
         @keyframes pulse {
@@ -605,26 +716,38 @@
     const grid = document.getElementById("peopleGrid");
     grid.innerHTML = "";
 
+    // Encontrar a pessoa com mais pontos
+    const maxPoints = Math.max(...people.map(p => p.points));
+    const hasWinner = maxPoints > 0;
+
     people.forEach(person => {
         const percent = Math.min((person.points / 10) * 100, 100);
+        const isLeader = hasWinner && person.points === maxPoints && maxPoints > 0;
 
         grid.innerHTML += `
             <div class="person-card">
-                <!-- Avatar com Foto -->
-                <div class="avatar" style="background:${person.color}">
-    <img src="${person.avatar}" alt="${person.name}" style="
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        object-fit: cover;
-        display: block;
-        margin: 0 auto;
-    ">
-</div>
-
+                <!-- Avatar com Coroa -->
+                <div class="avatar-container">
+                    <div class="crown ${isLeader ? 'show' : ''}">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div class="avatar" style="background:${person.color}">
+                        <img src="${person.avatar}" alt="${person.name}" style="
+                            width: 90px;
+                            height: 90px;
+                            border-radius: 50%;
+                            object-fit: cover;
+                            display: block;
+                            margin: 0 auto;
+                        ">
+                    </div>
+                </div>
 
                 <!-- Nome -->
-                <div class="person-name">${person.name}</div>
+                <div class="person-name">
+                    ${person.name}
+                    ${isLeader ? ' 👑' : ''}
+                </div>
 
                 <!-- Pontuação -->
                 <div class="points-container">
@@ -651,12 +774,15 @@
                         <span>${percent.toFixed(0)}%</span>
                     </div>
                     <div class="progress-bar">
-                        <div class="progress-fill" id="bar-${person.id}" style="width:${percent}%"></div>
+                        <div class="progress-fill" id="bar-${person.id}" 
+                             style="width:${percent}%; ${isLeader ? 'background: linear-gradient(90deg, gold, #FFD700);' : ''}">
+                        </div>
                     </div>
                 </div>
             </div>
         `;
     });
+
 
     // Event listeners para adicionar ponto
     document.querySelectorAll('.add-btn').forEach(btn => {
@@ -686,21 +812,59 @@
 }
 
         function updatePersonCard(person) {
-            const pointsEl = document.getElementById(`points-${person.id}`);
-            const barEl = document.getElementById(`bar-${person.id}`);
+    const pointsEl = document.getElementById(`points-${person.id}`);
+    const barEl = document.getElementById(`bar-${person.id}`);
+    
+    if (pointsEl && barEl) {
+        pointsEl.textContent = person.points;
+        const percent = Math.min((person.points / 10) * 100, 100);
+        barEl.style.width = percent + "%";
+        
+        // Atualiza label de porcentagem
+        const progressLabel = pointsEl.closest('.person-card')?.querySelector('.progress-label span:last-child');
+        if (progressLabel) {
+            progressLabel.textContent = `${percent.toFixed(0)}%`;
+        }
+        
+        // Atualizar coroa
+        updateCrowns();
+    }
+}
+
+// Função para atualizar as coroas
+function updateCrowns() {
+    const maxPoints = Math.max(...people.map(p => p.points));
+    const hasWinner = maxPoints > 0;
+    
+    // Para cada pessoa
+    people.forEach(person => {
+        const card = document.querySelector(`[data-id="${person.id}"]`)?.closest('.person-card');
+        if (card) {
+            const crown = card.querySelector('.crown');
+            const nameEl = card.querySelector('.person-name');
+            const barFill = card.querySelector('.progress-fill');
+            const isLeader = hasWinner && person.points === maxPoints && maxPoints > 0;
             
-            if (pointsEl && barEl) {
-                pointsEl.textContent = person.points;
-                const percent = Math.min((person.points / 10) * 100, 100);
-                barEl.style.width = percent + "%";
-                
-                // Atualiza label de porcentagem
-                const progressLabel = pointsEl.closest('.person-card')?.querySelector('.progress-label span:last-child');
-                if (progressLabel) {
-                    progressLabel.textContent = `${percent.toFixed(0)}%`;
-                }
+            // Atualizar coroa
+            if (crown) {
+                crown.classList.toggle('show', isLeader);
+            }
+            
+            // Atualizar emoji no nome
+            if (nameEl) {
+                const currentText = nameEl.textContent.replace(' 👑', '');
+                nameEl.textContent = currentText + (isLeader ? ' 👑' : '');
+            }
+            
+            // Atualizar cor da barra
+            if (barFill) {
+                barFill.style.background = isLeader 
+                    ? 'linear-gradient(90deg, gold, #FFD700)' 
+                    : 'linear-gradient(90deg, #ff4757, #ff6b6b)';
             }
         }
+    });
+}
 
         function notify(msg) {
             const n = document.getElementById("notification");
