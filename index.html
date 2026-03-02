@@ -28,7 +28,7 @@
             background-color: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
-            padding-top: 90px;
+            padding-top: 80px;
             background-image: radial-gradient(circle at 50% -20%, #1a1a1a 0%, #050505 80%);
         }
 
@@ -36,7 +36,7 @@
             background-color: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            height: 70px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -46,61 +46,59 @@
         }
 
         .brand-logo {
-            font-size: 1.4rem; font-weight: 900; letter-spacing: -1px;
+            font-size: 1.2rem; font-weight: 900; letter-spacing: -1px;
             text-transform: uppercase;
         }
         .brand-logo i { color: var(--accent-red); margin-right: 8px; }
         .brand-logo span { color: var(--accent-red); }
 
         .container {
-            width: 98%;
-            max-width: 1600px;
-            margin: 0 auto 120px;
+            width: 95%;
+            max-width: 1400px;
+            margin: 0 auto 100px;
         }
 
         .section-intro {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
         .section-intro h2 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 900;
-            letter-spacing: -0.05em;
             background: linear-gradient(to bottom, #fff, #666);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
+        /* GRID PRINCIPAL */
         .people-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
+            grid-template-columns: repeat(5, 1fr); /* 5 colunas no PC */
+            gap: 12px;
         }
 
         .person-card {
             background: var(--glass-bg);
             border: 1px solid var(--border-light);
-            border-radius: 24px;
-            padding: 25px 15px;
+            border-radius: 20px;
+            padding: 20px 10px;
             text-align: center;
             transition: all 0.3s ease;
             position: relative;
-        }
-
-        .person-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255,255,255,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .person-card.leader {
             border-color: rgba(255, 215, 0, 0.3);
-            background: rgba(255, 215, 0, 0.02);
+            background: rgba(255, 215, 0, 0.03);
         }
 
         .avatar-box {
             position: relative;
-            width: 90px; height: 90px;
-            margin: 0 auto 15px;
+            width: 70px; height: 70px;
+            margin: 0 auto 12px;
         }
 
         .avatar-img {
@@ -108,16 +106,14 @@
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--border-light);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.4);
         }
 
         .crown-overlay {
             position: absolute;
-            top: -15px; left: 50%;
+            top: -12px; left: 50%;
             transform: translateX(-50%);
-            font-size: 1.6rem;
+            font-size: 1.3rem;
             color: var(--accent-gold);
-            filter: drop-shadow(0 0 8px var(--accent-gold));
             opacity: 0;
             z-index: 10;
         }
@@ -125,65 +121,74 @@
 
         @keyframes float {
             0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-6px); }
+            50% { transform: translateX(-50%) translateY(-5px); }
         }
 
         .person-name { 
-            font-size: 1.1rem; 
+            font-size: 0.95rem; 
             font-weight: 700; 
-            margin-bottom: 5px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            margin-bottom: 8px;
+            color: #eee;
         }
         .leader .person-name { color: var(--accent-gold); }
 
-        .score-box { margin: 10px 0; }
-        .score-num { font-size: 3.2rem; font-weight: 900; color: var(--accent-red); line-height: 1; }
+        .score-num { font-size: 2.5rem; font-weight: 900; color: var(--accent-red); line-height: 1; }
         .leader .score-num { color: var(--accent-gold); }
-        .score-txt { font-size: 0.6rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
+        .score-txt { font-size: 0.55rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;}
 
-        .controls { display: flex; justify-content: center; gap: 8px; }
+        .controls { display: flex; justify-content: center; gap: 6px; }
         .btn-p {
-            width: 45px; height: 40px; border-radius: 12px; 
+            width: 40px; height: 38px; border-radius: 10px; 
             border: 1px solid var(--border-light);
             background: rgba(255,255,255,0.05); color: white; cursor: pointer;
         }
         .btn-add { background: var(--accent-red); border: none; }
 
-        .prog-container { margin-top: 20px; padding: 0 5px; }
+        .prog-container { margin-top: 15px; padding: 0 10px; }
         .prog-bg { height: 4px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
         .prog-fill { height: 100%; background: var(--accent-red); transition: width 0.8s ease; }
         .leader .prog-fill { background: var(--accent-gold); }
 
         .floating-actions {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 10px; background: rgba(0,0,0,0.85);
-            padding: 10px 20px; border-radius: 50px; backdrop-filter: blur(20px);
+            position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 8px; background: rgba(0,0,0,0.9);
+            padding: 8px 15px; border-radius: 50px; backdrop-filter: blur(20px);
             border: 1px solid var(--border-light); z-index: 2000;
         }
         .btn-g {
-            padding: 10px 18px; border-radius: 50px; border: none; font-weight: 700;
-            font-size: 0.7rem; text-transform: uppercase; cursor: pointer; color: white;
-            display: flex; align-items: center; gap: 6px;
+            padding: 8px 14px; border-radius: 50px; border: none; font-weight: 700;
+            font-size: 0.65rem; text-transform: uppercase; cursor: pointer; color: white;
+            display: flex; align-items: center; gap: 5px;
         }
         .btn-clear { background: transparent; border: 1px solid rgba(255,255,255,0.1); }
         .btn-refresh { background: #fff; color: #000; }
 
         .notification {
-            position: fixed; top: 80px; right: 20px;
-            background: #FFF; color: #000; padding: 12px 20px;
-            border-radius: 10px; font-weight: 800; transform: translateX(200%);
-            transition: 0.4s; z-index: 9999; font-size: 0.8rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: fixed; top: 70px; right: 20px;
+            background: #FFF; color: #000; padding: 10px 15px;
+            border-radius: 8px; font-weight: 800; transform: translateX(220%);
+            transition: 0.4s; z-index: 9999; font-size: 0.75rem;
         }
         .notification.show { transform: translateX(0); }
 
-        @media (max-width: 1200px) { .people-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (max-width: 800px) { .people-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 500px) { 
-            .people-grid { grid-template-columns: 1fr; }
-            .section-intro h2 { font-size: 1.8rem; }
+        /* RESPONSIVIDADE CORRIGIDA */
+        @media (max-width: 1100px) {
+            .people-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 700px) {
+            .people-grid { 
+                grid-template-columns: repeat(2, 1fr); /* 2 colunas no celular para não ficar fino */
+                gap: 10px;
+            }
+            .section-intro h2 { font-size: 1.6rem; }
+            .container { width: 92%; }
+            .avatar-box { width: 60px; height: 60px; }
+            .score-num { font-size: 2rem; }
+        }
+
+        @media (max-width: 380px) {
+            .people-grid { grid-template-columns: 1fr; } /* 1 coluna se o celular for muito pequeno */
         }
     </style>
 </head>
@@ -199,7 +204,6 @@
         <div class="section-intro">
             <h2>Ranking de Vacilos</h2>
         </div>
-
         <div class="people-grid" id="peopleGrid"></div>
     </main>
 
@@ -263,7 +267,6 @@
         async function resetAll() {
             const senha = prompt("Digite a senha para zerar:");
             if (senha === null) return;
-            
             if (senha.toLowerCase() === "babaca") {
                 const batch = writeBatch(db);
                 people.forEach(p => {
@@ -274,7 +277,6 @@
                 render();
                 showNotify("Tudo zerado!");
             } else {
-                // MENSAGEM PERSONALIZADA CONFORME SOLICITADO
                 alert("Errou a senha, babaca! 🖕");
             }
         }
@@ -282,8 +284,6 @@
         function render() {
             const grid = document.getElementById("peopleGrid");
             const maxPoints = Math.max(...people.map(p => p.points));
-            
-            // Ranking dinâmico (comentado se preferir ordem fixa por ID)
             const sorted = [...people].sort((a, b) => b.points - a.points);
 
             grid.innerHTML = sorted.map(p => {
