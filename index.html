@@ -68,9 +68,9 @@
         .menu-item {
             padding: 15px; border-radius: 12px; margin-bottom: 8px; cursor: pointer;
             display: flex; align-items: center; gap: 15px; color: var(--text-secondary); transition: 0.2s;
+            text-decoration: none;
         }
         .menu-item:hover { background: var(--glass-bg); color: white; }
-        .menu-item i.fa-google { color: #4285F4; }
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: none; z-index: 1999; }
 
         /* --- GRID & CARDS --- */
@@ -135,12 +135,9 @@
             <i class="fas fa-times" id="closeMenu" style="cursor:pointer"></i>
         </div>
         <ul style="list-style: none;">
-            <li class="menu-item" onclick="showNotify('Em breve: Lista de motivos')">
+            <a href="history.html" class="menu-item">
                 <i class="fas fa-history"></i> Histórico Geral
-            </li>
-            <li class="menu-item" onclick="window.open('https://google.com', '_blank')">
-                <i class="fab fa-google"></i> Pesquisar no Google
-            </li>
+            </a>
         </ul>
     </nav>
 
@@ -148,8 +145,8 @@
 
     <div class="modal-overlay" id="reasonModal">
         <div class="modal-content">
-            <h3 id="modalTitle">Motivo do Vacilo</h3>
-            <input type="text" class="modal-input" id="reasonInput" placeholder="Ex: Chegou atrasado...">
+            <h3 id="modalTitle">Motivo</h3>
+            <input type="text" class="modal-input" id="reasonInput" placeholder="Ex: Atraso...">
             <div style="display:flex; gap:10px">
                 <button onclick="closeModal()" style="flex:1; background:transparent; color:white; border:1px solid var(--border-light); border-radius:12px; cursor:pointer">Cancelar</button>
                 <button class="btn-confirm" id="confirmReason" style="flex:1">Salvar</button>
@@ -183,7 +180,6 @@
         const db = getFirestore(app);
         const COLLECTION = "babacometro";
 
-        // --- LÓGICA MENU ---
         const sidebar = document.getElementById('sidebarMenu');
         const overlay = document.getElementById('menuOverlay');
         document.getElementById('openMenu').onclick = () => { sidebar.classList.add('active'); overlay.style.display = 'block'; };
@@ -216,7 +212,8 @@
 
         window.openReasonModal = (id, amt) => {
             currentAction = { person: people.find(x => x.id === id), amount: amt };
-            document.getElementById("modalTitle").innerText = amt > 0 ? "Motivo do Vacilo" : "Motivo do Perdão";
+            const firstName = currentAction.person.name.split(' ')[0];
+            document.getElementById("modalTitle").innerText = amt > 0 ? `Vacilo de ${firstName}` : `Perdão para ${firstName}`;
             document.getElementById("reasonModal").style.display = "flex";
             document.getElementById("reasonInput").value = "";
             document.getElementById("reasonInput").focus();
@@ -249,13 +246,15 @@
 
             grid.innerHTML = sorted.map(p => {
                 const isLeader = maxPoints > 0 && p.points === maxPoints;
+                const firstName = p.name.split(' ')[0];
+                
                 return `
                     <div class="person-card ${isLeader ? 'leader' : ''}">
                         ${isLeader ? '<div class="crown-overlay"><i class="fas fa-crown"></i></div>' : ''}
                         <div class="avatar-box">
-                            <img src="${p.avatar}" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=${p.name}'">
+                            <img src="${p.avatar}" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=${firstName}'">
                         </div>
-                        <h3 class="person-name">${p.name}</h3>
+                        <h3 class="person-name">${firstName}</h3>
                         <div class="score-box">
                             <div class="score-num">${p.points}</div>
                         </div>
