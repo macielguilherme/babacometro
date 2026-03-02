@@ -1,314 +1,258 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Babacômetro Pro | Ranking 5x5</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-primary: #050505;
-            --bg-secondary: #111111;
-            --text-primary: #FFFFFF;
-            --text-secondary: #888888;
-            --accent-red: #ff3e3e;
-            --accent-gold: #FFD700;
-            --border-light: rgba(255, 255, 255, 0.08);
-            --glass-bg: rgba(255, 255, 255, 0.03);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Babacômetro Pro | Ranking 5x5</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg-primary: #050505;
+    --bg-secondary: #111111;
+    --text-primary: #FFFFFF;
+    --text-secondary: #888888;
+    --accent-red: #ff3e3e;
+    --accent-gold: #FFD700;
+    --border-light: rgba(255, 255, 255, 0.08);
+    --glass-bg: rgba(255, 255, 255, 0.03);
+}
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; -webkit-tap-highlight-color:transparent; }
+body { background-color: var(--bg-primary); color: var(--text-primary); min-height:100vh; padding-top:80px; background-image: radial-gradient(circle at 50% -20%, #1a1a1a 0%, #050505 80%); }
+/* HEADER */
+.header-fixed { background-color: rgba(0,0,0,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); height:60px; display:flex; align-items:center; justify-content:center; border-bottom:1px solid var(--border-light); position:fixed; top:0; width:100%; z-index:1000; }
+.brand-logo { font-size:1.1rem; font-weight:900; letter-spacing:-0.5px; text-transform:uppercase; }
+.brand-logo i { color: var(--accent-red); margin-right:8px; }
+.brand-logo span { color: var(--accent-red); }
 
-        * {
-            margin: 0; padding: 0; box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+.container { width:95%; max-width:1400px; margin:0 auto 120px; }
+.section-intro { text-align:center; margin-bottom:25px; }
+.section-intro h2 { font-size:1.8rem; font-weight:900; letter-spacing:-1px; }
 
-        body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            padding-top: 80px;
-            background-image: radial-gradient(circle at 50% -20%, #1a1a1a 0%, #050505 80%);
-        }
+/* GRID */
+.people-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:15px; }
+.person-card { background: var(--glass-bg); border:1px solid var(--border-light); border-radius:16px; padding:20px; text-align:center; position:relative; transition: transform 0.2s; }
+.avatar-box { position:relative; width:80px; height:80px; margin:0 auto 15px; }
+.avatar-img { width:100%; height:100%; border-radius:50%; object-fit:cover; border:2px solid var(--border-light); }
+.person-name { font-size:1rem; font-weight:700; margin-bottom:10px; }
+.score-num { font-size:2.8rem; font-weight:900; color: var(--accent-red); line-height:1; }
+.score-txt { font-size:0.6rem; color: var(--text-secondary); text-transform:uppercase; margin-bottom:15px; }
+.controls { display:flex; justify-content:center; gap:10px; }
+.btn-p { width:45px; height:42px; border-radius:12px; border:1px solid var(--border-light); background: rgba(255,255,255,0.05); color:white; cursor:pointer; }
+.btn-add { background: var(--accent-red); border:none; }
+.mobile-arrow { display:none; }
+.floating-actions { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); display:flex; gap:10px; background: rgba(0,0,0,0.9); padding:10px 20px; border-radius:50px; border:1px solid var(--border-light); z-index:2000; }
+.btn-g { padding:10px 16px; border-radius:50px; border:none; font-weight:700; font-size:0.7rem; cursor:pointer; color:white; display:flex; align-items:center; gap:6px; }
+.btn-refresh { background:#fff; color:#000; }
+.btn-clear { background:transparent; border:1px solid rgba(255,255,255,0.1); }
+.notification { position:fixed; top:75px; right:20px; background:#FFF; color:#000; padding:12px 20px; border-radius:10px; font-weight:800; transform:translateX(200%); transition:0.4s; z-index:9999; }
+.notification.show { transform:translateX(0); }
 
-        .header-fixed {
-            background-color: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-bottom: 1px solid var(--border-light);
-            position: fixed;
-            top: 0; width: 100%; z-index: 1000;
-        }
+/* MOBILE */
+@media(max-width:768px){
+.people-grid { grid-template-columns:1fr; gap:8px; }
+.person-card { display:flex; flex-direction:row; align-items:center; text-align:left; padding:12px 15px; border-radius:12px; justify-content:space-between; }
+.avatar-box { width:50px; height:50px; margin:0 15px 0 0; }
+.person-name { margin-bottom:0; font-size:1.1rem; flex-grow:1; }
+.score-box { display:flex; flex-direction:column; align-items:flex-end; margin-right:15px; }
+.score-num { font-size:1.8rem; }
+.score-txt { display:none; }
+.controls { gap:5px; }
+.btn-p { width:35px; height:35px; border-radius:8px; }
+.mobile-arrow { display:block; color:var(--text-secondary); margin-left:10px; font-size:0.8rem; }
+.prog-container { display:none; }
+.crown-overlay { left:15px; transform:none; top:-5px; font-size:1rem; }
+}
 
-        .brand-logo {
-            font-size: 1.1rem; font-weight: 900; letter-spacing: -0.5px;
-            text-transform: uppercase;
-        }
-        .brand-logo i { color: var(--accent-red); margin-right: 8px; }
-        .brand-logo span { color: var(--accent-red); }
-
-        .container {
-            width: 95%;
-            max-width: 1400px;
-            margin: 0 auto 120px;
-        }
-
-        .section-intro {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        .section-intro h2 {
-            font-size: 1.8rem;
-            font-weight: 900;
-            letter-spacing: -1px;
-        }
-
-        .people-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-        }
-
-        .person-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--border-light);
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            position: relative;
-            transition: transform 0.2s;
-        }
-
-        .avatar-box {
-            position: relative;
-            width: 80px; height: 80px;
-            margin: 0 auto 15px;
-        }
-
-        .avatar-img {
-            width: 100%; height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--border-light);
-        }
-
-        .person-name { 
-            font-size: 1rem; 
-            font-weight: 700; 
-            margin-bottom: 10px;
-        }
-
-        .score-num { font-size: 2.8rem; font-weight: 900; color: var(--accent-red); line-height: 1; }
-        .score-txt { font-size: 0.6rem; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 15px; }
-
-        .controls { display: flex; justify-content: center; gap: 10px; }
-        .btn-p {
-            width: 45px; height: 42px; border-radius: 12px; 
-            border: 1px solid var(--border-light);
-            background: rgba(255,255,255,0.05); color: white; cursor: pointer;
-        }
-        .btn-add { background: var(--accent-red); border: none; }
-
-        /* ESTILO DA COROA APENAS PARA O LÍDER */
-        .crown-overlay {
-            position: absolute;
-            top: -12px; left: 50%;
-            transform: translateX(-50%);
-            font-size: 1.5rem;
-            color: var(--accent-gold);
-            z-index: 10;
-            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
-            animation: float 3s infinite ease-in-out;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-5px); }
-        }
-
-        .leader .person-name { color: var(--accent-gold); }
-        .leader .score-num { color: var(--accent-gold); }
-
-        .mobile-arrow { display: none; }
-
-        .floating-actions {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 10px; background: rgba(0,0,0,0.9);
-            padding: 10px 20px; border-radius: 50px; border: 1px solid var(--border-light); z-index: 2000;
-        }
-        .btn-g {
-            padding: 10px 16px; border-radius: 50px; border: none; font-weight: 700;
-            font-size: 0.7rem; cursor: pointer; color: white; display: flex; align-items: center; gap: 6px;
-        }
-        .btn-refresh { background: #fff; color: #000; }
-        .btn-clear { background: transparent; border: 1px solid rgba(255,255,255,0.1); }
-
-        .notification {
-            position: fixed; top: 75px; right: 20px;
-            background: #FFF; color: #000; padding: 12px 20px;
-            border-radius: 10px; font-weight: 800; transform: translateX(200%);
-            transition: 0.4s; z-index: 9999;
-        }
-        .notification.show { transform: translateX(0); }
-
-        /* LISTA MOBILE */
-        @media (max-width: 768px) {
-            .people-grid { grid-template-columns: 1fr; gap: 8px; }
-            .person-card {
-                display: flex; flex-direction: row; align-items: center;
-                text-align: left; padding: 12px 15px; border-radius: 12px;
-                justify-content: space-between;
-            }
-            .avatar-box { width: 50px; height: 50px; margin: 0 15px 0 0; }
-            .person-name { margin-bottom: 0; font-size: 1.1rem; flex-grow: 1; }
-            .score-box { display: flex; flex-direction: column; align-items: flex-end; margin-right: 15px; }
-            .score-num { font-size: 1.8rem; }
-            .score-txt { display: none; }
-            .controls { gap: 5px; }
-            .btn-p { width: 35px; height: 35px; border-radius: 8px; }
-            .mobile-arrow { display: block; color: var(--text-secondary); margin-left: 10px; font-size: 0.8rem; }
-            .crown-overlay { left: 15px; transform: none; top: -8px; font-size: 1.2rem; }
-        }
-    </style>
+/* MODAL */
+#reasonModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:3000; }
+#reasonModal .modal-content { background:#111; padding:20px; border-radius:12px; width:90%; max-width:400px; color:white; text-align:center; }
+#reasonModal textarea { width:100%; height:80px; margin:10px 0; padding:10px; border-radius:8px; border:none; resize:none; background:#222; color:white; }
+#reasonModal button { padding:10px 20px; border:none; border-radius:8px; background:#ff3e3e; color:white; cursor:pointer; font-weight:700; }
+</style>
 </head>
 <body>
 
-    <header class="header-fixed">
-        <div class="brand-logo"><i class="fas fa-skull"></i>BABAC<span>ÔMETRO</span></div>
-    </header>
+<header class="header-fixed">
+    <div class="brand-logo"><i class="fas fa-skull"></i>BABAC<span>ÔMETRO</span></div>
+</header>
 
-    <div class="notification" id="toast">Sincronizado!</div>
+<div class="notification" id="toast">Sincronizado!</div>
 
-    <main class="container">
-        <div class="section-intro">
-            <h2>Ranking de Vacilos</h2>
-        </div>
-        <div class="people-grid" id="peopleGrid"></div>
-    </main>
-
-    <div class="floating-actions">
-        <button class="btn-g btn-clear" id="zeroBtn"><i class="fas fa-trash-alt"></i> Zerar</button>
-        <button class="btn-g btn-refresh" id="loadBtn"><i class="fas fa-sync-alt"></i> Atualizar</button>
+<main class="container">
+    <div class="section-intro">
+        <h2>Ranking de Vacilos</h2>
     </div>
+    <div class="people-grid" id="peopleGrid"></div>
+</main>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, updateDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+<div class="floating-actions">
+    <button class="btn-g btn-clear" id="zeroBtn"><i class="fas fa-trash-alt"></i> Zerar</button>
+    <button class="btn-g btn-refresh" id="loadBtn"><i class="fas fa-sync-alt"></i> Atualizar</button>
+</div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyCEpzihWjXaGD7DcNlXqqVfsuPiwbzUiH0",
-            authDomain: "babacometro-firebase.firebaseapp.com",
-            projectId: "babacometro-firebase",
-            storageBucket: "babacometro-firebase.firebasestorage.app",
-            messagingSenderId: "128530343865",
-            appId: "1:128530343865:web:8cc0ee623b3788edeef868"
-        };
+<!-- MODAL DE MOTIVO -->
+<div id="reasonModal">
+    <div class="modal-content">
+        <h3>Motivo da alteração</h3>
+        <textarea id="reasonText" placeholder="Digite o motivo..."></textarea>
+        <button id="confirmReason">Confirmar</button>
+    </div>
+</div>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const COLLECTION = "babacometro";
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, doc, getDoc, updateDoc, writeBatch, collection, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        let people = [
-            { id: 1, name: "Thanner Machado", docId: "thanner", points: 0, avatar: "https://cdn.bitrix24.com.br/b7533877/resize_cache/1854826/ff58db95aecdfa09ae61b51b5fd8f63f/main/ff4/ff4cf2cd8628a0777bae5e74b8af3c2f/Foto%20Profissional%20-%20Blazer%202.png" },
-            { id: 2, name: "Natalia Lucchetti", docId: "natalia", points: 0, avatar: "https://cdn.bitrix24.com.br/b7533877/resize_cache/1475014/ff58db95aecdfa09ae61b51b5fd8f63f/main/83c/83c5308d8d35f340e98fb6e2ad0dc86c/avatar.png" },
-            { id: 3, name: "Wesley Mourão", docId: "wesley", points: 0, avatar: "https://sosdocs.bitrix24.com.br/b7533877/resize_cache/1683770/a7fa78f57e73ecbd0b9500a062d0d214/main/64e/64ea5ab3537b228c7649277d62c0d635/Foto%20perfil.png" },
-            { id: 4, name: "Miqueas Andrade", docId: "miqueas", points: 0, avatar: "https://cdn.bitrix24.com.br/b7533877/resize_cache/321177/ff58db95aecdfa09ae61b51b5fd8f63f/main/d96/d96e11b40df523977b7c88e457c0da2c/Foto.jpg" },
-            { id: 5, name: "Fábio Moura", docId: "fabio", points: 0, avatar: "https://cdn.bitrix24.com.br/b7533877/resize_cache/1146590/ff58db95aecdfa09ae61b51b5fd8f63f/main/b02/b02a0e2583c6fddf22a6c9822169beb6/IMG_5981.jpg.png" },
-            { id: 6, name: "Lucas Freitas", docId: "lucas", points: 0, avatar: "https://sosdocs.bitrix24.com.br/b7533877/resize_cache/1259888/a7fa78f57e73ecbd0b9500a062d0d214/main/657/657983805453bff6d018035fe80aa95b/foto%20perfil.jpg.png" },
-            { id: 7, name: "Ariel Vieira", docId: "ariel", points: 0, avatar: "https://cdn.bitrix24.com.br/b7533877/resize_cache/1477916/ff58db95aecdfa09ae61b51b5fd8f63f/main/16c/16cdf2dea99724a3e78d6fc9a4f4f648/avatar.png" },
-            { id: 8, name: "Guilherme Ribeiro", docId: "guilherme", points: 0, avatar: "https://sosdocs.bitrix24.com.br/b7533877/resize_cache/1797518/a7fa78f57e73ecbd0b9500a062d0d214/main/8e3/8e33b192d613594ea8861dbb4f32e7ba/avatar.png" },
-            { id: 9, name: "Abner Ambrósio", docId: "abner", points: 0, avatar: "https://cdn.bitrix24.com.br/b7533877/resize_cache/1801982/ff58db95aecdfa09ae61b51b5fd8f63f/main/9af/9afde7b1ea11956a3577eaa29c61ed53/Perfil.png" },
-            { id: 10, name: "André Rodrigues", docId: "andre", points: 0, avatar: "https://sosdocs.bitrix24.com.br/b7533877/resize_cache/1456416/a7fa78f57e73ecbd0b9500a062d0d214/main/944/9443050d93f5e04d2e1e71f34e1f62b7/CPBSB6_Influencers_MAR-2024-13.jpg.png" }
-        ];
+const firebaseConfig = {
+    apiKey: "AIzaSyCEpzihWjXaGD7DcNlXqqVfsuPiwbzUiH0",
+    authDomain: "babacometro-firebase.firebaseapp.com",
+    projectId: "babacometro-firebase",
+    storageBucket: "babacometro-firebase.firebasestorage.app",
+    messagingSenderId: "128530343865",
+    appId: "1:128530343865:web:8cc0ee623b3788edeef868"
+};
 
-        async function loadData() {
-            try {
-                for (const person of people) {
-                    const ref = doc(db, COLLECTION, person.docId);
-                    const snap = await getDoc(ref);
-                    if (snap.exists()) person.points = snap.data().points;
-                }
-                render();
-            } catch (e) { showNotify("Erro ao conectar"); }
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const COLLECTION = "babacometro";
+
+let people = [
+    { id:1,name:"Thanner Machado",docId:"thanner",points:0,avatar:"https://cdn.bitrix24.com.br/b7533877/resize_cache/1854826/ff58db95aecdfa09ae61b51b5fd8f63f/main/ff4/ff4cf2cd8628a0777bae5e74b8af3c2f/Foto%20Profissional%20-%20Blazer%202.png" },
+    { id:2,name:"Natalia Lucchetti",docId:"natalia",points:0,avatar:"https://cdn.bitrix24.com.br/b7533877/resize_cache/1475014/ff58db95aecdfa09ae61b51b5fd8f63f/main/83c/83c5308d8d35f340e98fb6e2ad0dc86c/avatar.png" },
+    { id:3,name:"Wesley Mourão",docId:"wesley",points:0,avatar:"https://sosdocs.bitrix24.com.br/b7533877/resize_cache/1683770/a7fa78f57e73ecbd0b9500a062d0d214/main/64e/64ea5ab3537b228c7649277d62c0d635/Foto%20perfil.png" },
+    { id:4,name:"Miqueas Andrade",docId:"miqueas",points:0,avatar:"https://cdn.bitrix24.com.br/b7533877/resize_cache/321177/ff58db95aecdfa09ae61b51b5fd8f63f/main/d96/d96e11b40df523977b7c88e457c0da2c/Foto.jpg" },
+    { id:5,name:"Fábio Moura",docId:"fabio",points:0,avatar:"https://cdn.bitrix24.com.br/b7533877/resize_cache/1146590/ff58db95aecdfa09ae61b51b5fd8f63f/main/b02/b02a0e2583c6fddf22a6c9822169beb6/IMG_5981.jpg.png" },
+    { id:6,name:"Lucas Freitas",docId:"lucas",points:0,avatar:"https://sosdocs.bitrix24.com.br/b7533877/resize_cache/1259888/a7fa78f57e73ecbd0b9500a062d0d214/main/657/657983805453bff6d018035fe80aa95b/foto%20perfil.jpg.png" },
+    { id:7,name:"Ariel Vieira",docId:"ariel",points:0,avatar:"https://cdn.bitrix24.com.br/b7533877/resize_cache/1477916/ff58db95aecdfa09ae61b51b5fd8f63f/main/16c/16cdf2dea99724a3e78d6fc9a4f4f648/avatar.png" },
+    { id:8,name:"Guilherme Ribeiro",docId:"guilherme",points:0,avatar:"https://sosdocs.bitrix24.com.br/b7533877/resize_cache/1797518/a7fa78f57e73ecbd0b9500a062d0d214/main/8e3/8e33b192d613594ea8861dbb4f32e7ba/avatar.png" },
+    { id:9,name:"Abner Ambrósio",docId:"abner",points:0,avatar:"https://cdn.bitrix24.com.br/b7533877/resize_cache/1801982/ff58db95aecdfa09ae61b51b5fd8f63f/main/9af/9afde7b1ea11956a3577eaa29c61ed53/Perfil.png" },
+    { id:10,name:"André Rodrigues",docId:"andre",points:0,avatar:"https://sosdocs.bitrix24.com.br/b7533877/resize_cache/1456416/a7fa78f57e73ecbd0b9500a062d0d214/main/944/9443050d93f5e04d2e1e71f34e1f62b7/CPBSB6_Influencers_MAR-2024-13.jpg.png" }
+];
+
+let pendingChange = null;
+
+// --- LOAD DATA ---
+async function loadData(){
+    try{
+        for(const person of people){
+            const ref = doc(db,COLLECTION,person.docId);
+            const snap = await getDoc(ref);
+            if(snap.exists()) person.points = snap.data().points;
         }
+        render();
+    } catch(e){ showNotify("Erro ao conectar"); }
+}
 
-        async function updatePoints(person, amount) {
-            const newPoints = Math.max(0, person.points + amount);
-            const ref = doc(db, COLLECTION, person.docId);
-            try {
-                await updateDoc(ref, { points: newPoints });
-                person.points = newPoints;
-                render();
-            } catch (e) { showNotify("Erro ao salvar"); }
-        }
+// --- UPDATE POINTS COM MODAL ---
+function act(id, amt){
+    pendingChange = { id, amt };
+    document.getElementById("reasonText").value = "";
+    document.getElementById("reasonModal").style.display = "flex";
+}
 
-        async function resetAll() {
-            const senha = prompt("Digite a senha para zerar:");
-            if (senha === null) return;
-            if (senha.toLowerCase() === "babaca") {
-                const batch = writeBatch(db);
-                people.forEach(p => {
-                    batch.update(doc(db, COLLECTION, p.docId), { points: 0 });
-                    p.points = 0;
-                });
-                await batch.commit();
-                render();
-                showNotify("Tudo zerado!");
-            } else {
-                alert("Errou a senha, babaca! 🖕");
-            }
-        }
+document.getElementById("confirmReason").onclick = async ()=>{
+    const reason = document.getElementById("reasonText").value.trim() || "Sem motivo";
+    const {id, amt} = pendingChange;
+    pendingChange = null;
+    document.getElementById("reasonModal").style.display = "none";
 
-        function render() {
-            const grid = document.getElementById("peopleGrid");
-            const maxPoints = Math.max(...people.map(p => p.points));
-            const sorted = [...people].sort((a, b) => b.points - a.points);
+    const p = people.find(x=>x.id===id);
+    const newPoints = Math.max(0, p.points + amt);
+    const ref = doc(db, COLLECTION, p.docId);
+    try{
+        // Atualiza pontos
+        await updateDoc(ref,{ points: newPoints });
+        p.points = newPoints;
 
-            grid.innerHTML = sorted.map(p => {
-                const isLeader = maxPoints > 0 && p.points === maxPoints;
-                
-                return `
-                    <div class="person-card ${isLeader ? 'leader' : ''}">
-                        ${isLeader ? '<div class="crown-overlay"><i class="fas fa-crown"></i></div>' : ''}
-                        
-                        <div class="avatar-box">
-                            <img src="${p.avatar}" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=${p.name}'">
-                        </div>
-                        <h3 class="person-name">${p.name}</h3>
-                        <div class="score-box">
-                            <div class="score-num">${p.points}</div>
-                            <div class="score-txt">Vacilos</div>
-                        </div>
-                        <div class="controls">
-                            <button class="btn-p" onclick="act(${p.id}, -1)"><i class="fas fa-minus"></i></button>
-                            <button class="btn-p btn-add" onclick="act(${p.id}, 1)"><i class="fas fa-plus"></i></button>
-                        </div>
-                        <i class="fas fa-chevron-right mobile-arrow"></i>
-                    </div>
-                `;
-            }).join("");
-        }
+        // Adiciona histórico
+        const histRef = doc(collection(db,COLLECTION,p.docId,"history"));
+        await setDoc(histRef,{
+            user: "Sistema",
+            amount: amt,
+            reason: reason,
+            timestamp: serverTimestamp()
+        });
 
-        window.act = (id, amt) => {
-            const p = people.find(x => x.id === id);
-            updatePoints(p, amt);
-        };
+        render();
+        showNotify("Pontos atualizados e histórico salvo!");
+    } catch(e){ showNotify("Erro ao salvar"); }
+};
 
-        function showNotify(msg) {
-            const t = document.getElementById("toast");
-            t.innerText = msg;
-            t.classList.add("show");
-            setTimeout(() => t.classList.remove("show"), 2500);
-        }
+// --- RESET ALL ---
+async function resetAll(){
+    const senha = prompt("Digite a senha para zerar:");
+    if(senha===null) return;
+    if(senha.toLowerCase()==="babaca"){
+        const batch = writeBatch(db);
+        people.forEach(p=>{
+            batch.update(doc(db,COLLECTION,p.docId),{ points:0 });
+            p.points=0;
+        });
+        await batch.commit();
+        render();
+        showNotify("Tudo zerado!");
+    } else alert("Errou a senha, babaca!");
+}
 
-        document.getElementById("loadBtn").onclick = loadData;
-        document.getElementById("zeroBtn").onclick = resetAll;
-        loadData();
-    </script>
+// --- RENDER ---
+function render(){
+    const grid = document.getElementById("peopleGrid");
+    const maxPoints = Math.max(...people.map(p=>p.points));
+    const sorted = [...people].sort((a,b)=>b.points-a.points);
+
+    grid.innerHTML = sorted.map(p=>{
+        const isLeader = maxPoints>0 && p.points===maxPoints;
+        return `
+        <div class="person-card ${isLeader?'leader':''}">
+            <div class="crown-overlay"><i class="fas fa-crown"></i></div>
+            <div class="avatar-box">
+                <img src="${p.avatar}" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=${p.name}'">
+            </div>
+            <h3 class="person-name">${p.name}</h3>
+            <div class="score-box">
+                <div class="score-num">${p.points}</div>
+                <div class="score-txt">Vacilos</div>
+            </div>
+            <div class="controls">
+                <button class="btn-p" onclick="act(${p.id}, -1)"><i class="fas fa-minus"></i></button>
+                <button class="btn-p btn-add" onclick="act(${p.id}, 1)"><i class="fas fa-plus"></i></button>
+            </div>
+            <i class="fas fa-chevron-right mobile-arrow"></i>
+        </div>`;
+    }).join("");
+}
+
+// --- NOTIFY ---
+function showNotify(msg){
+    const t = document.getElementById("toast");
+    t.innerText = msg;
+    t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"),2500);
+}
+
+// --- EVENTOS ---
+document.getElementById("loadBtn").onclick = loadData;
+document.getElementById("zeroBtn").onclick = resetAll;
+loadData();
+
+// --- HISTÓRICO INICIAL (UMA VEZ) ---
+async function criarHistoricoInicial(){
+    for(const p of people){
+        try{
+            const histRef = doc(collection(db,COLLECTION,p.docId,"history"));
+            await setDoc(histRef,{
+                user: "Sistema",
+                amount: 0,
+                reason: "Histórico inicial",
+                timestamp: serverTimestamp()
+            });
+            console.log(`Histórico criado para ${p.docId}`);
+        } catch(err){ console.error(`Erro histórico ${p.docId}:`,err); }
+    }
+}
+criarHistoricoInicial();
+
+</script>
 </body>
 </html>
