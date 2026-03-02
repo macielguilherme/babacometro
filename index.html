@@ -32,7 +32,6 @@
             background-image: radial-gradient(circle at 50% -20%, #1a1a1a 0%, #050505 80%);
         }
 
-        /* HEADER */
         .header-fixed {
             background-color: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(20px);
@@ -69,14 +68,12 @@
             letter-spacing: -1px;
         }
 
-        /* GRID/LISTA */
         .people-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 15px;
         }
 
-        /* ESTILO DO CARD (LIST VIEW AUTOMÁTICO NO MOBILE) */
         .person-card {
             background: var(--glass-bg);
             border: 1px solid var(--border-light);
@@ -117,10 +114,28 @@
         }
         .btn-add { background: var(--accent-red); border: none; }
 
-        /* ICONE DE SETA (SÓ APARECE NO MOBILE) */
+        /* ESTILO DA COROA APENAS PARA O LÍDER */
+        .crown-overlay {
+            position: absolute;
+            top: -12px; left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            color: var(--accent-gold);
+            z-index: 10;
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+            animation: float 3s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        .leader .person-name { color: var(--accent-gold); }
+        .leader .score-num { color: var(--accent-gold); }
+
         .mobile-arrow { display: none; }
 
-        /* FLOATING ACTIONS */
         .floating-actions {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             display: flex; gap: 10px; background: rgba(0,0,0,0.9);
@@ -141,58 +156,23 @@
         }
         .notification.show { transform: translateX(0); }
 
-        /* ———————— CELULAR (ESTILO LISTA IGUAL À IMAGEM) ———————— */
+        /* LISTA MOBILE */
         @media (max-width: 768px) {
-            .people-grid {
-                grid-template-columns: 1fr; /* Vira uma lista de uma coluna só */
-                gap: 8px;
-            }
-
+            .people-grid { grid-template-columns: 1fr; gap: 8px; }
             .person-card {
-                display: flex;
-                flex-direction: row; /* Alinha os itens em linha */
-                align-items: center;
-                text-align: left;
-                padding: 12px 15px;
-                border-radius: 12px;
+                display: flex; flex-direction: row; align-items: center;
+                text-align: left; padding: 12px 15px; border-radius: 12px;
                 justify-content: space-between;
             }
-
-            .avatar-box {
-                width: 50px; height: 50px;
-                margin: 0 15px 0 0; /* Remove margem de cima e coloca na direita */
-            }
-
-            .person-name {
-                margin-bottom: 0;
-                font-size: 1.1rem;
-                flex-grow: 1; /* Faz o nome ocupar o espaço central */
-            }
-
-            /* No mobile, o score e botões ficam compactos à direita */
-            .score-box {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-end;
-                margin-right: 15px;
-            }
-
+            .avatar-box { width: 50px; height: 50px; margin: 0 15px 0 0; }
+            .person-name { margin-bottom: 0; font-size: 1.1rem; flex-grow: 1; }
+            .score-box { display: flex; flex-direction: column; align-items: flex-end; margin-right: 15px; }
             .score-num { font-size: 1.8rem; }
-            .score-txt { display: none; } /* Esconde o texto "Vacilos" no mobile pra limpar o visual */
-
+            .score-txt { display: none; }
             .controls { gap: 5px; }
             .btn-p { width: 35px; height: 35px; border-radius: 8px; }
-
-            .mobile-arrow {
-                display: block;
-                color: var(--text-secondary);
-                margin-left: 10px;
-                font-size: 0.8rem;
-            }
-            
-            /* Esconde a barra de progresso no mobile para ficar idêntico à lista */
-            .prog-container { display: none; }
-            .crown-overlay { left: 15px; transform: none; top: -5px; font-size: 1rem; }
+            .mobile-arrow { display: block; color: var(--text-secondary); margin-left: 10px; font-size: 0.8rem; }
+            .crown-overlay { left: 15px; transform: none; top: -8px; font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -294,7 +274,8 @@
                 
                 return `
                     <div class="person-card ${isLeader ? 'leader' : ''}">
-                        <div class="crown-overlay"><i class="fas fa-crown"></i></div>
+                        ${isLeader ? '<div class="crown-overlay"><i class="fas fa-crown"></i></div>' : ''}
+                        
                         <div class="avatar-box">
                             <img src="${p.avatar}" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=${p.name}'">
                         </div>
