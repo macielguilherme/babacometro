@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Linha do Tempo | Babacômetro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #050505;
+            --bg-secondary: #111111;
+            --text-primary: #FFFFFF;
+            --text-secondary: #888888;
+            --accent-red: #ff3e3e;
+            --accent-green: #00ff88;
+            --border-light: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding-bottom: 50px;
+            background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #050505 100%);
+        }
+
+        /* HEADER */
+        .header {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            border-bottom: 1px solid var(--border-light);
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0; z-index: 100;
+        }
+
+        .btn-back {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            margin-right: 20px;
+        }
+
+        .header h1 { font-size: 1.2rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* TIMELINE CONTAINER */
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 40px auto;
+            position: relative;
+        }
+
+        /* A LINHA CENTRAL */
+        .container::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background: var(--border-light);
+            top: 0; bottom: 0;
+            left: 20px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding-left: 50px;
+            animation: fadeIn 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* O PONTO NA LINHA */
+        .timeline-dot {
+            position: absolute;
+            width: 12px; height: 12px;
+            background: var(--accent-red);
+            border-radius: 50%;
+            left: 15px; top: 5px;
+            z-index: 2;
+            box-shadow: 0 0 10px var(--accent-red);
+        }
+
+        .dot-green { background: var(--accent-green); box-shadow: 0 0 10px var(--accent-green); }
+
+        /* CARD DO HISTÓRICO */
+        .history-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-light);
+            padding: 20px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-thumb {
+            width: 45px; height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--border-light);
+        }
+
+        .history-info { flex-grow: 1; }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 5px;
+        }
+
+        .user-name { font-weight: 700; font-size: 1rem; color: #fff; }
+        .timestamp { font-size: 0.7rem; color: var(--text-secondary); }
+
+        .reason-text {
+            font-size: 0.9rem;
+            color: #ccc;
+            line-height: 1.4;
+            font-style: italic;
+        }
+
+        .points-badge {
+            font-size: 0.8rem;
+            font-weight: 900;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+        .badge-red { background: rgba(255, 62, 62, 0.1); color: var(--accent-red); }
+        .badge-green { background: rgba(0, 255, 136, 0.1); color: var(--accent-green); }
+
+        /* LOADING SPINNER */
+        #loader { text-align: center; margin-top: 50px; color: var(--text-secondary); }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i></a>
+        <h1>Linha do Tempo de Vacilos</h1>
+    </header>
+
+    <div class="container" id="timeline">
+        <div id="loader"><i class="fas fa-circle-notch fa-spin"></i> Consultando os podres...</div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCEpzihWjXaGD7DcNlXqqVfsuPiwbzUiH0",
+            authDomain: "babacometro-firebase.firebaseapp.com",
+            projectId: "babacometro-firebase",
+            storageBucket: "babacometro-firebase.firebasestorage.app",
+            messagingSenderId: "128530343865",
+            appId: "1:128530343865:web:8cc0ee623b3788edeef868"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Dados dos usuários para cruzar com o ID do histórico
+        const users = {
+            thanner: { name: "Thanner", thumb: "https://cdn.bitrix24.com.br/b7533877/resize_cache/1854826/ff58db95aecdfa09ae61b51b5fd8f63f/main/ff4/ff4cf2cd8628a0777bae5e74b8af3c2f/Foto%20Profissional%20-%20Blazer%202.png" },
+            natalia: { name: "Natalia", thumb: "https://cdn.bitrix24.com.br/b7533877/resize_cache/1475014/ff58db95aecdfa09ae61b51b5fd8f63f/main/83c/83c5308d8d35f340e98fb6e2ad0dc86c/avatar.png" },
+            wesley: { name: "Wesley", thumb: "https://sosdocs.bitrix24.com.br/b7533877/resize_cache/1683770/a7fa78f57e73ecbd0b9500a062d0d214/main/64e/64ea5ab3537b228c7649277d62c0d635/Foto%20perfil.png" },
+            miqueas: { name: "Miqueas", thumb: "https://cdn.bitrix24.com.br/b7533877/resize_cache/321177/ff58db95aecdfa09ae61b51b5fd8f63f/main/d96/d96e11b40df523977b7c88e457c0da2c/Foto.jpg" },
+            fabio: { name: "Fábio", thumb: "https://cdn.bitrix24.com.br/b7533877/resize_cache/1146590/ff58db95aecdfa09ae61b51b5fd8f63f/main/b02/b02a0e2583c6fddf22a6c9822169beb6/IMG_5981.jpg.png" },
+            lucas: { name: "Lucas", thumb: "https://sosdocs.bitrix24.com.br/b7533877/resize_cache/1259888/a7fa78f57e73ecbd0b9500a062d0d214/main/657/657983805453bff6d018035fe80aa95b/foto%20perfil.jpg.png" },
+            ariel: { name: "Ariel", thumb: "https://cdn.bitrix24.com.br/b7533877/resize_cache/1477916/ff58db95aecdfa09ae61b51b5fd8f63f/main/16c/16cdf2dea99724a3e78d6fc9a4f4f648/avatar.png" },
+            guilherme: { name: "Guilherme", thumb: "https://sosdocs.bitrix24.com.br/b7533877/resize_cache/1797518/a7fa78f57e73ecbd0b9500a062d0d214/main/8e3/8e33b192d613594ea8861dbb4f32e7ba/avatar.png" },
+            abner: { name: "Abner", thumb: "https://cdn.bitrix24.com.br/b7533877/resize_cache/1801982/ff58db95aecdfa09ae61b51b5fd8f63f/main/9af/9afde7b1ea11956a3577eaa29c61ed53/Perfil.png" },
+            andre: { name: "André", thumb: "https://sosdocs.bitrix24.com.br/b7533877/resize_cache/1456416/a7fa78f57e73ecbd0b9500a062d0d214/main/944/9443050d93f5e04d2e1e71f34e1f62b7/CPBSB6_Influencers_MAR-2024-13.jpg.png" }
+        };
+
+        async function fetchAllHistory() {
+            let allEvents = [];
+            const ids = Object.keys(users);
+
+            try {
+                for (const docId of ids) {
+                    const hRef = collection(db, "babacometro", docId, "historico");
+                    const q = query(hRef, orderBy("data", "desc"), limit(20));
+                    const snap = await getDocs(q);
+                    
+                    snap.forEach(doc => {
+                        allEvents.push({
+                            ...doc.data(),
+                            userId: docId
+                        });
+                    });
+                }
+
+                // Ordenar todos os eventos de todos os usuários por data
+                allEvents.sort((a, b) => b.data?.seconds - a.data?.seconds);
+                renderTimeline(allEvents);
+            } catch (e) {
+                console.error(e);
+                document.getElementById('timeline').innerHTML = `<div style="color:red; text-align:center">Erro ao carregar histórico.</div>`;
+            }
+        }
+
+        function renderTimeline(events) {
+            const container = document.getElementById('timeline');
+            if (events.length === 0) {
+                container.innerHTML = `<div style="text-align:center; color:gray; margin-top:40px">Nenhum vacilo registrado ainda.</div>`;
+                return;
+            }
+
+            container.innerHTML = events.map(ev => {
+                const user = users[ev.userId];
+                const date = ev.data ? new Date(ev.data.seconds * 1000).toLocaleString('pt-BR') : 'Agora pouco';
+                const isPositive = ev.variacao > 0;
+
+                return `
+                    <div class="timeline-item">
+                        <div class="timeline-dot ${!isPositive ? 'dot-green' : ''}"></div>
+                        <div class="history-card">
+                            <img src="${user.thumb}" class="user-thumb" onerror="this.src='https://ui-avatars.com/api/?name=${user.name}'">
+                            <div class="history-info">
+                                <div class="history-header">
+                                    <span class="user-name">${user.name}</span>
+                                    <span class="points-badge ${isPositive ? 'badge-red' : 'badge-green'}">
+                                        ${isPositive ? '+1 Vacilo' : '-1 Perdão'}
+                                    </span>
+                                </div>
+                                <div class="reason-text">"${ev.motivo}"</div>
+                                <div class="timestamp">${date}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        fetchAllHistory();
+    </script>
+</body>
+</html>
