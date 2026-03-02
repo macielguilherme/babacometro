@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Babacômetro Pro | Ranking de Vacilos</title>
+    <title>Babacômetro Pro | Ranking 5x5</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
@@ -16,7 +16,6 @@
             --accent-gold: #FFD700;
             --border-light: rgba(255, 255, 255, 0.05);
             --glass-bg: rgba(255, 255, 255, 0.02);
-            --card-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
         * {
@@ -29,7 +28,7 @@
             background-color: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
-            padding-top: 100px;
+            padding-top: 90px;
             background-image: radial-gradient(circle at 50% -20%, #1a1a1a 0%, #050505 80%);
         }
 
@@ -56,17 +55,17 @@
 
         /* --- CONTAINER --- */
         .container {
-            width: 92%;
-            max-width: 1400px;
+            width: 98%;
+            max-width: 1600px;
             margin: 0 auto 120px;
         }
 
         .section-intro {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 40px;
         }
         .section-intro h2 {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             font-weight: 900;
             letter-spacing: -0.05em;
             background: linear-gradient(to bottom, #fff, #666);
@@ -74,57 +73,56 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* --- NOVO GRID --- */
+        /* --- GRID 5x5 --- */
         .people-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 25px;
+            /* Força 5 colunas em telas grandes */
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
         }
 
         .person-card {
             background: var(--glass-bg);
             border: 1px solid var(--border-light);
-            border-radius: 30px;
-            padding: 35px 25px;
+            border-radius: 24px;
+            padding: 25px 15px;
             text-align: center;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s ease;
             position: relative;
-            overflow: hidden;
         }
 
         .person-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255,255,255,0.04);
-            border-color: rgba(255,255,255,0.1);
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.05);
         }
 
         .person-card.leader {
-            border-color: rgba(255, 215, 0, 0.2);
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.05);
+            border-color: rgba(255, 215, 0, 0.3);
+            background: rgba(255, 215, 0, 0.02);
         }
 
         /* Avatar */
         .avatar-box {
             position: relative;
-            width: 120px; height: 120px;
-            margin: 0 auto 20px;
+            width: 90px; height: 90px;
+            margin: 0 auto 15px;
         }
 
         .avatar-img {
             width: 100%; height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--bg-secondary);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            border: 2px solid var(--border-light);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.4);
         }
 
         .crown-overlay {
             position: absolute;
-            top: -20px; left: 50%;
+            top: -15px; left: 50%;
             transform: translateX(-50%);
-            font-size: 2rem;
+            font-size: 1.6rem;
             color: var(--accent-gold);
-            filter: drop-shadow(0 0 10px var(--accent-gold));
+            filter: drop-shadow(0 0 8px var(--accent-gold));
             opacity: 0;
             z-index: 10;
         }
@@ -132,62 +130,70 @@
 
         @keyframes float {
             0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-10px); }
+            50% { transform: translateX(-50%) translateY(-6px); }
         }
 
-        .person-name { font-size: 1.5rem; font-weight: 800; margin-bottom: 5px; }
+        .person-name { 
+            font-size: 1.1rem; 
+            font-weight: 700; 
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
         .leader .person-name { color: var(--accent-gold); }
 
         /* Score */
-        .score-box { margin: 20px 0; }
-        .score-num { font-size: 4.5rem; font-weight: 900; color: var(--accent-red); letter-spacing: -2px; }
+        .score-box { margin: 10px 0; }
+        .score-num { font-size: 3.2rem; font-weight: 900; color: var(--accent-red); line-height: 1; }
         .leader .score-num { color: var(--accent-gold); }
-        .score-txt { font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 2px; }
+        .score-txt { font-size: 0.6rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
 
         /* Controles */
-        .controls { display: flex; justify-content: center; gap: 12px; }
+        .controls { display: flex; justify-content: center; gap: 8px; }
         .btn-p {
-            width: 60px; height: 50px; border-radius: 15px; 
+            width: 45px; height: 40px; border-radius: 12px; 
             border: 1px solid var(--border-light);
-            background: rgba(255,255,255,0.05); color: white; cursor: pointer; transition: 0.2s;
+            background: rgba(255,255,255,0.05); color: white; cursor: pointer;
         }
-        .btn-p:hover { background: rgba(255,255,255,0.1); }
-        .btn-add { background: var(--accent-red); border: none; font-size: 1.2rem; }
-        .btn-add:hover { background: #ff5252; transform: scale(1.05); }
+        .btn-add { background: var(--accent-red); border: none; }
 
-        /* Barra de Progresso */
-        .prog-container { margin-top: 30px; padding: 0 10px; }
-        .prog-bg { height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
-        .prog-fill { height: 100%; background: var(--accent-red); transition: width 1s cubic-bezier(0.1, 0, 0, 1); }
+        /* Barra */
+        .prog-container { margin-top: 20px; padding: 0 5px; }
+        .prog-bg { height: 4px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
+        .prog-fill { height: 100%; background: var(--accent-red); transition: width 0.8s ease; }
         .leader .prog-fill { background: var(--accent-gold); }
 
         /* Floating Actions */
         .floating-actions {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 15px; background: rgba(0,0,0,0.8);
-            padding: 12px 25px; border-radius: 100px; backdrop-filter: blur(20px);
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 10px; background: rgba(0,0,0,0.85);
+            padding: 10px 20px; border-radius: 50px; backdrop-filter: blur(20px);
             border: 1px solid var(--border-light); z-index: 2000;
         }
         .btn-g {
-            padding: 12px 20px; border-radius: 50px; border: none; font-weight: 700;
-            font-size: 0.75rem; text-transform: uppercase; cursor: pointer; color: white;
-            display: flex; align-items: center; gap: 8px;
+            padding: 10px 18px; border-radius: 50px; border: none; font-weight: 700;
+            font-size: 0.7rem; text-transform: uppercase; cursor: pointer; color: white;
+            display: flex; align-items: center; gap: 6px;
         }
         .btn-clear { background: transparent; border: 1px solid rgba(255,255,255,0.1); }
         .btn-refresh { background: #fff; color: #000; }
 
-        /* Toast */
+        /* Notification */
         .notification {
-            position: fixed; top: 90px; right: 20px;
-            background: #FFF; color: #000; padding: 15px 25px;
-            border-radius: 12px; font-weight: 800; transform: translateX(200%);
-            transition: 0.5s; z-index: 9999;
+            position: fixed; top: 80px; right: 20px;
+            background: #FFF; color: #000; padding: 12px 20px;
+            border-radius: 10px; font-weight: 800; transform: translateX(200%);
+            transition: 0.4s; z-index: 9999; font-size: 0.8rem;
         }
         .notification.show { transform: translateX(0); }
 
-        @media (max-width: 600px) {
-            .section-intro h2 { font-size: 2rem; }
+        /* Responsividade para Tablet e Celular */
+        @media (max-width: 1200px) { .people-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 800px) { .people-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 500px) { 
             .people-grid { grid-template-columns: 1fr; }
+            .section-intro h2 { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -201,7 +207,6 @@
 
     <main class="container">
         <div class="section-intro">
-            <p style="color: var(--text-secondary); text-transform: uppercase; letter-spacing: 4px; font-size: 0.7rem; margin-bottom: 10px;">Monitoramento em Tempo Real</p>
             <h2>Ranking de Vacilos</h2>
         </div>
 
@@ -251,8 +256,8 @@
                     if (snap.exists()) person.points = snap.data().points;
                 }
                 render();
-                showNotify("Ranking Sincronizado");
-            } catch (e) { showNotify("Erro de conexão"); }
+                showNotify("Dados Carregados");
+            } catch (e) { showNotify("Erro ao conectar"); }
         }
 
         async function updatePoints(person, amount) {
@@ -266,11 +271,9 @@
         }
 
         async function resetAll() {
-            const senha = prompt("Digite a senha para zerar o ranking:");
+            const senha = prompt("Digite a senha para zerar:");
             if (senha === null) return;
-            
             if (senha.toLowerCase() === "babaca") {
-                if(!confirm("Cuidado! Isso vai zerar todos os vacilos. Prosseguir?")) return;
                 const batch = writeBatch(db);
                 people.forEach(p => {
                     batch.update(doc(db, COLLECTION, p.docId), { points: 0 });
@@ -280,29 +283,32 @@
                 render();
                 showNotify("Tudo zerado!");
             } else {
-                alert("Senha errada, babaca!");
+                alert("Senha errada!");
             }
         }
 
         function render() {
             const grid = document.getElementById("peopleGrid");
             const maxPoints = Math.max(...people.map(p => p.points));
+            
+            // Note: Se quiser manter 5x5 fixo por ID, remova o .sort()
+            // Se quiser ranking dinâmico, mantenha o .sort()
             const sorted = [...people].sort((a, b) => b.points - a.points);
 
             grid.innerHTML = sorted.map(p => {
                 const isLeader = maxPoints > 0 && p.points === maxPoints;
-                const progress = Math.min((p.points / 20) * 100, 100);
+                const progress = Math.min((p.points / 15) * 100, 100);
                 
                 return `
                     <div class="person-card ${isLeader ? 'leader' : ''}">
                         <div class="crown-overlay"><i class="fas fa-crown"></i></div>
                         <div class="avatar-box">
-                            <img src="${p.avatar}" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=${p.name}&background=333&color=fff'">
+                            <img src="${p.avatar}" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=${p.name}'">
                         </div>
                         <h3 class="person-name">${p.name}</h3>
                         <div class="score-box">
                             <div class="score-num">${p.points}</div>
-                            <div class="score-txt">Vacilos Acumulados</div>
+                            <div class="score-txt">Vacilos</div>
                         </div>
                         <div class="controls">
                             <button class="btn-p" onclick="act(${p.id}, -1)"><i class="fas fa-minus"></i></button>
@@ -330,7 +336,6 @@
 
         document.getElementById("loadBtn").onclick = loadData;
         document.getElementById("zeroBtn").onclick = resetAll;
-
         loadData();
     </script>
 </body>
